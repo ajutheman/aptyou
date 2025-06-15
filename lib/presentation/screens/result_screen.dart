@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../../core/constants/assets.dart';
 
 class ResultScreen extends StatelessWidget {
-  const ResultScreen({super.key});
+  final int score;
+  const ResultScreen({super.key, required this.score});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +24,9 @@ class ResultScreen extends StatelessWidget {
               const SizedBox(height: 24),
 
               // 🎉 Main Message
-              const Text(
-                "Wow! You collected 5 T cards!",
-                style: TextStyle(
+              Text(
+                "Wow! You collected $score T card${score > 1 ? 's' : ''}!",
+                style: const TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: Colors.deepPurple,
@@ -35,7 +36,6 @@ class ResultScreen extends StatelessWidget {
 
               const SizedBox(height: 12),
 
-              // 🌟 Sub Message
               const Text(
                 "You're a T expert!",
                 style: TextStyle(
@@ -47,7 +47,6 @@ class ResultScreen extends StatelessWidget {
 
               const SizedBox(height: 32),
 
-              // ✅ Next Button
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/letsWriteT');
@@ -58,7 +57,7 @@ class ResultScreen extends StatelessWidget {
                 ),
                 child: const Text(
                   "Let’s Write Letter T!",
-                  style: TextStyle(fontSize: 18,color: Colors.white54),
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
             ],

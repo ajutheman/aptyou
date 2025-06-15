@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:rive/rive.dart';
 import '../../data/models/content_model.dart';
+import 'package:aptyou/presentation/screens/result_screen.dart';
 
 class GameScreen extends StatefulWidget {
   final ScriptTagModel script;
@@ -105,7 +106,13 @@ class _GameScreenState extends State<GameScreen> {
       if (_round >= 5) {
         await _playAudio(widget.script.finishGameAudio);
         Future.delayed(const Duration(seconds: 2), () {
-          Navigator.pushReplacementNamed(context, '/result');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ResultScreen(score: _score),
+            ),
+          );
+
         });
       } else {
         await _playAudio(widget.script.roundPrompts[min(_score, widget.script.roundPrompts.length - 1)]);

@@ -12,8 +12,10 @@ import 'presentation/screens/login_screen.dart';
 import 'presentation/screens/home_screen.dart';
 import 'presentation/screens/game_screen.dart';
 import 'presentation/screens/result_screen.dart';
+import 'presentation/screens/write_t_screen.dart'; // ✅ Make sure this file exists
 import 'presentation/rive_demo/rive_demo_screen.dart';
 import 'data/models/content_model.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -44,7 +46,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
         ),
-        // Initial routing based on authentication state
         home: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
             if (state is AuthSuccess) {
@@ -54,19 +55,16 @@ class MyApp extends StatelessWidget {
             }
           },
         ),
-        // Named routes for internal navigation
         routes: {
           '/home': (_) => const HomeScreen(),
           '/login': (_) => const LoginScreen(),
-          '/result': (_) => const ResultScreen(),
           '/riveDemo': (_) => const RiveDemoScreen(),
-          '/writeT': (_) => const WriteTScreen(),
+          '/writeT': (_) => const WriteTScreen(), // ✅ Make sure class exists
           '/game': (context) {
             final script = ModalRoute.of(context)!.settings.arguments as ScriptTagModel;
             return GameScreen(script: script);
           },
         },
-
       ),
     );
   }
