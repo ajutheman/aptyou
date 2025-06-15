@@ -35,7 +35,7 @@ class LoginScreen extends StatelessWidget {
           return Center(
             child: ElevatedButton(
               onPressed: () {
-                context.read<AuthBloc>().add(SignInWithGoogle());
+                context.read<AuthBloc>().add(SignInWithGooglePressed());
 
               },
               child: const Text("Sign in with Google"),

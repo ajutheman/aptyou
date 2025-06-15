@@ -15,14 +15,16 @@ class _TPairGameScreenState extends State<TPairGameScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   int _round = 1;
-  int _step = 0; // 0 = capital T, 1 = small t
+  int _step = 0; // 0 = Capital T, 1 = Small t
   int _score = 0;
+  int _wrongAttempts = 0;
   bool _isLocked = false;
 
   @override
   void initState() {
     super.initState();
     _shuffleLetters();
+    _playPromptAudio();
   }
 
   void _shuffleLetters() {
@@ -39,38 +41,67 @@ class _TPairGameScreenState extends State<TPairGameScreen> {
     }
   }
 
-  void _onLetterTap(String letter) {
-    if (_isLocked) return;
-
-    setState(() => _isLocked = true);
-
-    if (_step == 0 && letter == 'T') {
-      _playAudio("https://apty-read-bucket.s3.us-east-1.amazonaws.com/flutter_app_assets/lesson-2_topic-5/mp3/en_in_rq_L1_ls2_T5_Yes_Thats_Capital_T.mp3");
-      setState(() => _step = 1);
-    } else if (_step == 1 && letter == 't') {
-      _playAudio("https://apty-read-bucket.s3.us-east-1.amazonaws.com/flutter_app_assets/lesson-2_topic-5/mp3/en_in_rq_L1_ls2_T5_Great_job.mp3");
-      _score++;
-      _nextRound();
+  void _playPromptAudio() {
+    if (_step == 0) {
+      _playAudio("https://apty-read-bucket.s3.us-east-1.amazonaws.com/flutter_app_assets/lesson-2_topic-5/mp3/en_in_rq_L1_ls2_T5_Tap_on_Capital_T.mp3");
     } else {
-      _playAudio("https://apty-read-bucket.s3.us-east-1.amazonaws.com/flutter_app_assets/lesson-2_topic-5/mp3/en_in_rq_L1_ls2_T5_Oops_Try_again.mp3");
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() => _isLocked = false);
-      });
+      _playAudio("https://apty-read-bucket.s3.us-east-1.amazonaws.com/flutter_app_assets/lesson-2_topic-5/mp3/en_in_rq_L1_ls2_T5_Now_tap_on_Small_t.mp3");
     }
   }
 
-  void _nextRound() {
-    if (_round < 5) {
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() {
-          _round++;
-          _step = 0;
-          _isLocked = false;
-          _shuffleLetters();
-        });
+  void _onLetterTap(String letter) async {
+    if (_isLocked) return;
+    setState(() => _isLocked = true);
+
+    if (_step == 0 && letter == 'T') {
+      await _playAudio("https://apty-read-bucket.s3.us-east-1.amazonaws.com/flutter_app_assets/lesson-2_topic-5/mp3/en_in_rq_L1_ls2_T5_Yes_Thats_Capital_T.mp3");
+      setState(() {
+        _step = 1;
+        _isLocked = false;
+        _wrongAttempts = 0;
       });
+      _playPromptAudio();
+    } else if (_step == 1 && letter == 't') {
+      await _playAudio("https://apty-read-bucket.s3.us-east-1.amazonaws.com/flutter_app_assets/lesson-2_topic-5/mp3/en_in_rq_L1_ls2_T5_Great_job.mp3");
+      await _playAudio("https://apty-read-bucket.s3.us-east-1.amazonaws.com/flutter_app_assets/lesson-2_topic-5/mp3/en_in_rq_L1_ls2_T5_You_did_it.mp3");
+
+      setState(() {
+        _score++;
+        _round++;
+        _step = 0;
+        _wrongAttempts = 0;
+      });
+
+      if (_round > 5) {
+        await _playAudio("https://apty-read-bucket.s3.us-east-1.amazonaws.com/flutter_app_assets/lesson-2_topic-5/mp3/en_in_rq_L1_ls2_T5_Wow_You_collected_5_T_cards.mp3");
+        Navigator.pushReplacementNamed(context, '/result');
+      } else {
+        Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            _shuffleLetters();
+            _isLocked = false;
+          });
+          _playPromptAudio();
+        });
+      }
     } else {
-      // TODO: Trigger final celebration
+      _wrongAttempts++;
+      await _playAudio("https://apty-read-bucket.s3.us-east-1.amazonaws.com/flutter_app_assets/lesson-2_topic-5/mp3/en_in_rq_L1_ls2_T5_Oops_Try_again.mp3");
+
+      if (_wrongAttempts >= 2) {
+        Future.delayed(const Duration(seconds: 1), () {
+          setState(() {
+            _round++;
+            _step = 0;
+            _wrongAttempts = 0;
+            _isLocked = false;
+            _shuffleLetters();
+          });
+          _playPromptAudio();
+        });
+      } else {
+        setState(() => _isLocked = false);
+      }
     }
   }
 
@@ -91,6 +122,7 @@ class _TPairGameScreenState extends State<TPairGameScreen> {
             _step == 0 ? "Tap Capital T" : "Now tap Small t",
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
+          const SizedBox(height: 12),
           Expanded(
             child: Center(
               child: Wrap(
@@ -118,7 +150,7 @@ class _TPairGameScreenState extends State<TPairGameScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           Text("T Cards Collected: $_score", style: const TextStyle(fontSize: 18)),
           const SizedBox(height: 20),
         ],

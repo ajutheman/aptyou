@@ -14,21 +14,28 @@ class ResultScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // 🏆 Trophy Image
               Image.asset(
                 Assets.imageTrophy,
                 height: 180,
               ),
+
               const SizedBox(height: 24),
+
+              // 🎉 Main Message
               const Text(
                 "Wow! You collected 5 T cards!",
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: Colors.deepPurple,
                 ),
                 textAlign: TextAlign.center,
               ),
+
               const SizedBox(height: 12),
+
+              // 🌟 Sub Message
               const Text(
                 "You're a T expert!",
                 style: TextStyle(
@@ -37,12 +44,22 @@ class ResultScreen extends StatelessWidget {
                   color: Colors.black87,
                 ),
               ),
+
               const SizedBox(height: 32),
+
+              // ✅ Next Button
               ElevatedButton(
                 onPressed: () {
-                  // TODO: Navigate to “Let’s Write Letter T!” screen
+                  Navigator.pushNamed(context, '/letsWriteT');
                 },
-                child: const Text("Let’s Write Letter T!"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+                child: const Text(
+                  "Let’s Write Letter T!",
+                  style: TextStyle(fontSize: 18,color: Colors.white54),
+                ),
               ),
             ],
           ),

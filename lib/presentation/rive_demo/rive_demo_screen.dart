@@ -23,33 +23,37 @@ class _RiveDemoScreenState extends State<RiveDemoScreen> {
 
   Future<void> _loadRiveFile() async {
     try {
-      _riveFile = await RiveFile.network(
+      final file = await RiveFile.network(
         'https://apty-read-bucket.s3.us-east-1.amazonaws.com/flutter_app_assets/lesson-2_topic-5/rive/en_in_rq_L1_ls2_T5_1-4_round.riv',
       );
-      setState(() => _isLoading = false);
+      setState(() {
+        _riveFile = file;
+        _isLoading = false;
+      });
     } catch (e) {
-      print('Error loading Rive file: $e');
+      print('❌ Error loading Rive file: $e');
       setState(() => _isLoading = false);
     }
   }
 
   void _onRiveInit(Artboard artboard) {
-    final stateMachines = artboard.stateMachines;
-    if (stateMachines.isEmpty) {
-      print('No state machines found in Rive file');
-      return;
-    }
+    final controller = StateMachineController.fromArtboard(
+      artboard,
+      artboard.stateMachines.first.name,
+    );
+    if (controller != null) {
+      artboard.addController(controller);
+      _controller = controller;
 
-    _controller = StateMachineController.fromArtboard(artboard, stateMachines.first.name);
-    if (_controller != null) {
-      artboard.addController(_controller!);
-
-      final inputs = _controller!.inputs;
-      stateInput = _controller!.findSMI('T') as SMINumber?;
+      stateInput = controller.findInput<double>('T') as SMINumber?;
       if (stateInput != null) {
         setState(() => _isInitialized = true);
-        print('Rive state input ready');
+        print('✅ Rive state machine initialized');
+      } else {
+        print('⚠️ Input "T" not found in state machine');
       }
+    } else {
+      print('⚠️ No valid state machine controller found');
     }
   }
 
@@ -68,7 +72,7 @@ class _RiveDemoScreenState extends State<RiveDemoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('T Card Animation')),
+      appBar: AppBar(title: const Text('🎞️ T Card Animation')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Column(

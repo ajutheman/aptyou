@@ -47,6 +47,9 @@ dependencies:
   lottie: ^3.3.1
   device_info_plus: ^11.4.0
   firebase_messaging: ^15.2.7
+  just_audio: ^0.9.36
+  flutter_svg: ^2.0.7
+#  rive: ^0.12.4
 #  audioplayers: ^5.2.1
 
 
@@ -71,10 +74,20 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-#  assets:
-#    - assets/rive/
-#    - assets/audio/
-#    - assets/images/
+  assets:
+    - assets/svg/
+    - assets/letters/
+    - assets/letters/capitalT.svg
+    - assets/letters/samlla.svg
+    - assets/letters/A.svg
+    - assets/letters/capitals.svg
+    - assets/letters/s.svg
+#    - assets/svg/Capital T-3.svg
+#    - assets/svg/Capital T-4.svg
+#    - assets/svg/Capital T-5.svg
+#    - assets/svg/Capital T-6.svg
+#    - assets/svg/Capital T-7.svg
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -4,34 +4,28 @@ import 'auth_state.dart';
 import '../../../data/repositories/auth_repository.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthRepository _authRepository;
+  final AuthRepository _authRepository = AuthRepository();
 
-  AuthBloc({AuthRepository? authRepository})
-      : _authRepository = authRepository ?? AuthRepository(),
-        super(AuthInitial()) {
-    on<AppStarted>(_onAppStarted);
-    on<SignInWithGoogle>(_onSignInWithGoogle);
-  }
+  AuthBloc() : super(AuthInitial()) {
+    on<AppStarted>((event, emit) async {
+      emit(AuthInitial()); // Add logic to check saved state if needed
+    });
 
-  Future<void> _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {
-    emit(AuthInitial());
-  }
+    on<SignInWithGooglePressed>((event, emit) async {
+      emit(AuthLoading());
+      try {
+        final result = await _authRepository.signInWithGoogle();
+        emit(AuthSuccess(
+          accessToken: result.accessToken,
+          displayName: result.displayName,
+        ));
+      } catch (e) {
+        emit(AuthFailure(e.toString()));
+      }
+    });
 
-  Future<void> _onSignInWithGoogle(SignInWithGoogle event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
-    try {
-      final result = await _authRepository.signInWithGoogle();
-      // 👉 Add this log to confirm emission
-      print("✅ Auth Success: ${result.displayName}, Token: ${result.accessToken}");
-
-
-      emit(AuthSuccess(accessToken: result.accessToken, displayName: result.displayName));
-      // 👉 Add this log to confirm emission
-      print("✅ Auth Success: ${result.displayName}, Token: ${result.accessToken}");
-
-
-    } catch (e) {
-      emit(AuthFailure(e.toString()));
-    }
+    on<SignOutRequested>((event, emit) async {
+      emit(AuthInitial()); // You may call signOut from Firebase if needed
+    });
   }
 }
