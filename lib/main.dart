@@ -9,6 +9,8 @@ import 'logic/auth/bloc/auth_event.dart';
 import 'logic/auth/bloc/auth_state.dart';
 
 import 'presentation/screens/login_screen.dart';
+import 'presentation/screens/RiveDemo.dart';
+// lib/presentation/screens/RiveDemo.dart
 import 'presentation/screens/home_screen.dart';
 import 'presentation/screens/game_screen.dart';
 import 'presentation/screens/result_screen.dart';
@@ -56,7 +58,8 @@ class MyApp extends StatelessWidget {
           },
         ),
         routes: {
-          '/home': (_) => const HomeScreen(),
+          // '/home': (_) => const HomeScreen(),
+          '/home': (_) => const RiveDemo(),
           '/login': (_) => const LoginScreen(),
           '/riveDemo': (_) => const RiveDemoScreen(),
           '/writeT': (_) => const WriteTScreen(), // ✅ Make sure class exists

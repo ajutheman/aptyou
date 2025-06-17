@@ -1,68 +1,83 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as flutter;
+import 'package:rive/rive.dart';
 import '../../core/constants/assets.dart';
 
-class ResultScreen extends StatelessWidget {
+class ResultScreen extends flutter.StatelessWidget {
   final int score;
   const ResultScreen({super.key, required this.score});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.purple.shade50,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // 🏆 Trophy Image
-              Image.asset(
-                Assets.imageTrophy,
-                height: 180,
-              ),
-
-              const SizedBox(height: 24),
-
-              // 🎉 Main Message
-              Text(
-                "Wow! You collected $score T card${score > 1 ? 's' : ''}!",
-                style: const TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple,
-                ),
-                textAlign: TextAlign.center,
-              ),
-
-              const SizedBox(height: 12),
-
-              const Text(
-                "You're a T expert!",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
-              ),
-
-              const SizedBox(height: 32),
-
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/letsWriteT');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                ),
-                child: const Text(
-                  "Let’s Write Letter T!",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
-              ),
-            ],
+  flutter.Widget build(flutter.BuildContext context) {
+    return flutter.Scaffold(
+      body: flutter.Stack(
+        children: [
+          // 🎨 Background Image
+          flutter.Positioned.fill(
+            child: flutter.Image.asset(
+              'assets/images/background.png',
+              fit: flutter.BoxFit.cover,
+            ),
           ),
-        ),
+
+          // 🎉 Rive Final Celebration Animation
+          const flutter.Positioned.fill(
+            child: RiveAnimation.network(
+              "https://apty-read-bucket1.s3.ap-south-1.amazonaws.com/sample_test_assets/topic_5/en_in_rq_L1_ls2_T5_final_round.riv",
+              fit: flutter.BoxFit.cover,
+            ),
+          ),
+
+          // 📦 Main Content
+          flutter.SafeArea(
+            child: flutter.Column(
+              children: [
+                const flutter.SizedBox(height: 680),
+
+
+                flutter.Padding(
+                  padding: const flutter.EdgeInsets.symmetric(horizontal: 24.0),
+                  child: flutter.Container(
+                    width: double.infinity,
+                    decoration: flutter.BoxDecoration(
+                      gradient: const flutter.LinearGradient(
+                        colors: [
+                          flutter.Color(0xFFFFA8B8),
+                          flutter.Color(0xFFFF8A65),
+                        ],
+                      ),
+                      borderRadius: flutter.BorderRadius.circular(12),
+                    ),
+                    child: flutter.Material(
+                      color: flutter.Colors.transparent,
+                      child: flutter.InkWell(
+                        onTap: () {
+                          flutter.Navigator.pushNamed(context, '/home');
+
+                        },
+                        borderRadius: flutter.BorderRadius.circular(12),
+                        child: const flutter.Padding(
+                          padding: flutter.EdgeInsets.symmetric(vertical: 14),
+                          child: flutter.Center(
+                            child: flutter.Text(
+                              "Let’s Write Letter T!",
+                              style: flutter.TextStyle(
+                                fontSize: 18,
+                                color: flutter.Colors.white,
+                                fontWeight: flutter.FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const flutter.SizedBox(height: 32),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

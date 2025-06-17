@@ -83,30 +83,67 @@ class HomeScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 40),
 
-                            ElevatedButton(
-                              onPressed: () {
+                            // ElevatedButton(
+                            //   onPressed: () {
+                            //     Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //         builder: (_) => GameScreen(script: script),
+                            //       ),
+                            //     );
+                            //   },
+                            //   style: ElevatedButton.styleFrom(
+                            //     backgroundColor: Colors.deepPurple,
+                            //     shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(30),
+                            //     ),
+                            //     padding: const EdgeInsets.symmetric(
+                            //       horizontal: 40,
+                            //       vertical: 16,
+                            //     ),
+                            //   ),
+                            //   child: Text(
+                            //     script.buttonText,
+                            //     style: const TextStyle(fontSize: 18),
+                            //   ),
+                            // ),
+// Replace the ElevatedButton widget inside the Column with this:
+                            GestureDetector(
+                              onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => GameScreen(script: script),
+                                    builder: (_) =>
+                                        GameScreen(script: script),
                                   ),
                                 );
                               },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.deepPurple,
-                                shape: RoundedRectangleBorder(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [
+
+                                      Color(0xFFFFA8B8),
+                                      Color(0xFFFF8A65),
+
+                                    ],
+                                  ),
                                   borderRadius: BorderRadius.circular(30),
                                 ),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 40,
-                                  vertical: 16,
+                                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                                child: const Text(
+                                  // "Start Game",
+                                  "Let's Write Letter T !",
+                                  // script.buttonText,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
-                              child: Text(
-                                script.buttonText,
-                                style: const TextStyle(fontSize: 18),
-                              ),
                             ),
+
                           ],
                         ),
                       ),
