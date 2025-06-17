@@ -84,6 +84,7 @@ class ScriptTagModel {
   });
 
   factory ScriptTagModel.fromJson(Map<String, dynamic> json) {
+    print(json['cardRewardRive']);
     return ScriptTagModel(
       format: json['format'],
       gameType: json['gameType'],

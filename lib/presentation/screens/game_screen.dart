@@ -28,6 +28,7 @@ class _GameScreenState extends flutter.State<GameScreen> {
   bool _showCelebration = false;
   bool _showTPairCard = false;
   bool _showCorrectCardOnce = false;
+  String? _selectedPreviousLetter;
   String? _selectedLetter;
 
   RiveFile? _riveFile;
@@ -56,6 +57,7 @@ class _GameScreenState extends flutter.State<GameScreen> {
       _tries = 0;
       _isLocked = false;
       _selectedLetter = null;
+      _selectedPreviousLetter = null;
       _showCelebration = false;
       _showTPairCard = false;
       _showCorrectCardOnce = false;
@@ -112,6 +114,7 @@ class _GameScreenState extends flutter.State<GameScreen> {
       setState(() {
         _step = 1;
         _isLocked = false;
+        _selectedPreviousLetter = _selectedLetter;
         _selectedLetter = null;
       });
       _playPrompt();
@@ -343,7 +346,7 @@ class _GameScreenState extends flutter.State<GameScreen> {
                     child: flutter.Stack(
                       children: [
                         ..._letterBoxes.map((box) {
-                          final isSelected = box.letter == _selectedLetter;
+                          final isSelected = ((box.letter == _selectedLetter) || (box.letter == _selectedPreviousLetter));
                           return flutter.Positioned(
                             left: box.offset.dx,
                             top: box.offset.dy,
